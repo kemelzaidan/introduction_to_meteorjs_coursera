@@ -9,7 +9,7 @@ if (Meteor.isClient) {
 	// helper function that returns all available websites
 	Template.website_list.helpers({
 		websites:function(){
-			return Websites.find({}, {sort:{rating:-1, createOn:-1}});
+			return Websites.find({}, {sort:{upVotes:-1, downVotes:-1, createOn:-1}});
 		}
 	});
 
@@ -22,12 +22,12 @@ if (Meteor.isClient) {
 			// example of how you can access the id for the website in the database
 			// (this is the data context for the template)
 			var website_id = this._id;
-			var site_rating = this.rating;
+			var up_votes = this.upVotes;
 			console.log("Up voting website with id "+website_id);
 			// put the code in here to add a vote to a website!
 			Websites.update({_id:website_id},
-											{$inc: {rating:1}});
-			console.log("Rating of "+site_rating);
+											{$inc: {upVotes:1}});
+			console.log("Up votes: "+up_votes);
 
 			return false;// prevent the button from reloading the page
 		},
@@ -36,13 +36,13 @@ if (Meteor.isClient) {
 			// example of how you can access the id for the website in the database
 			// (this is the data context for the template)
 			var website_id = this._id;
-			var site_rating = this.rating;
+			var down_votes = this.downVotes;
 			console.log("Down voting website with id "+website_id);
 
 			// put the code in here to remove a vote from a website!
 			Websites.update({_id:website_id},
-											{$inc: {rating:-1}});
-			console.log("Rating of "+site_rating);
+											{$inc: {downVotes:1}});
+			console.log("Down votes: "+down_votes);
 
 			return false;// prevent the button from reloading the page
 		}
@@ -67,7 +67,8 @@ if (Meteor.isClient) {
 											description:description,
 											createdOn:new Date(),
 											createdBy:Meteor.user()._id,
-											rating:0
+											upVotes:0,
+											downVotes:0
 										});
 
 			$("#website_form").toggle('slow');

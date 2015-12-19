@@ -82,3 +82,26 @@ if (Meteor.isClient) {
 if (Meteor.isServer) {
 
 }
+
+// routing
+Router.configure({
+	layoutTemplate: 'ApplicationLayout'
+});
+
+Router.route('/', function () {
+  this.render('sitesList', {
+		to:"main"
+	});
+});
+
+Router.route('/website/:_id', function () {
+	this.render('navbar', {
+		to: 'navbar'
+	});
+	this.render('websiteDetails', {
+		to: 'main',
+		data: function () {
+			return Websites.findOne({_id: this.params._id});
+		}
+	});
+});

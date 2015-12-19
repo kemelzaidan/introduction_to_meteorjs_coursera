@@ -3,24 +3,36 @@
 </head>
 
 <body>
-	<!-- navbar  - you will be putting the login functions here -->
-	<nav class="navbar navbar-default">
-	  <div class="container-fluid">
-	    <div class="navbar-header">
-	      <a class="navbar-brand" href="#">
-	        Site Ace
-	      </a>
-	    </div>
-      {{> loginButtons}}
-	  </div>
-	</nav>
 
-	<div class="container">
+
+
+</body>
+
+<template name="ApplicationLayout">
+  {{> yield "navbar"}}
+  {{> yield "main"}}
+</template>
+
+<template name="navbar">
+  <!-- navbar  - you will be putting the login functions here -->
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="#">
+          Site Ace
+        </a>
+      </div>
+      {{> loginButtons}}
+    </div>
+  </nav>
+</template>
+
+<template name="sitesList">
+  <div class="container">
 		{{> website_form}}
 		{{> website_list}}
 	</div>
-</body>
-
+</template>
 
 <template name="website_form">
 	<a class="btn btn-default js-toggle-website-form" href="#">
@@ -58,13 +70,14 @@
 <!-- template that displays individual website entries -->
 <template name="website_item">
 <li>
-	<a href="{{url}}">{{title}}</a>
-	<p>
-		{{description}}
-	</p>
+  <a href="{{url}}">{{title}}</a>
+  <p>
+    {{description}}
+  </p>
   <p>
     Created: <small>{{createdOn}}</small>
   </p>
+  <a href="/website/{{_id}}">More...</a>
 	<a href="#" class="btn btn-default js-upvote">
 		<span class="glyphicon glyphicon-arrow-up" aria-hidden="true">{{upVotes}}</span>
 	</a>
@@ -73,4 +86,21 @@
 	</a>
 	<!-- you will be putting your up and down vote buttons in here! -->
 </li>
+</template>
+
+<template name="websiteDetails">
+  <a href="{{url}}"><h2>{{title}}</h2></a>
+  <p>
+    {{description}}
+  </p>
+  <p>
+    Created: <small>{{createdOn}}</small>
+  </p>
+
+  {{# if comments}}
+  <h3>Comments:</h3>
+    {{#each comment}}
+      {{comments}}
+    {{/each}}
+  {{/if}}
 </template>

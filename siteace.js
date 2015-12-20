@@ -1,6 +1,11 @@
 Websites = new Mongo.Collection("websites");
 
 if (Meteor.isClient) {
+	// Configuration
+	Comments.ui.config({
+   template: 'bootstrap'
+	});
+
 
 	/////
 	// template helpers

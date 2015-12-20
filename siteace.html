@@ -4,8 +4,6 @@
 
 <body>
 
-
-
 </body>
 
 <template name="ApplicationLayout">
@@ -88,19 +86,31 @@
 </li>
 </template>
 
-<template name="websiteDetails">
-  <a href="{{url}}"><h2>{{title}}</h2></a>
-  <p>
-    {{description}}
-  </p>
-  <p>
-    Created: <small>{{createdOn}}</small>
-  </p>
-
-  {{# if comments}}
-  <h3>Comments:</h3>
+<template name="websiteComments">
+  <ul>
     {{#each comment}}
-      {{comments}}
+      <li>{{content}}</li>
     {{/each}}
-  {{/if}}
+  </ul>
+</template>
+
+<template name="post">
+    {{> commentsBox id=website._id customTemplate="websiteComments"}}
+</template>
+
+<template name="websiteDetails">
+  <div class="container">
+    <a href="{{url}}"><h2>{{title}}</h2></a>
+    <p>
+      {{description}}
+    </p>
+    <p>
+      Created: <small>{{createdOn}}</small>
+    </p>
+
+    <!-- {{> websiteComments}} -->
+    <div class="comment-section">
+    {{> commentsBox id=this._id}}
+    </div>
+  </div>
 </template>

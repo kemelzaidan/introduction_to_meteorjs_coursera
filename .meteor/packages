@@ -22,3 +22,4 @@ twbs:bootstrap
 accounts-password
 accounts-ui
 iron:router
+arkham:comments-ui

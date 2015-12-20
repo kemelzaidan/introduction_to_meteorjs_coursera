@@ -94,6 +94,9 @@ Router.configure({
 });
 
 Router.route('/', function () {
+	this.render('navbar', {
+		to: 'navbar'
+	});
   this.render('sitesList', {
 		to:"main"
 	});

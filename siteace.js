@@ -1,4 +1,9 @@
 Websites = new Mongo.Collection("websites");
+var WebsitesIndex = new EasySearch.Index({
+	collection: Websites,
+	fields: ['title', 'description'],
+	engine: new EasySearch.MongoDB()
+});
 
 if (Meteor.isClient) {
 	// Configuration
@@ -11,10 +16,21 @@ if (Meteor.isClient) {
 	// template helpers
 	/////
 
+	// Search box
+	Template.navbar.helpers({
+		websitesIndex: function (){
+			return WebsitesIndex;
+		}
+	});
+
 	// helper function that returns all available websites
 	Template.website_list.helpers({
-		websites:function(){
-			return Websites.find({}, {sort:{upVotes:-1, downVotes:-1, createOn:-1}});
+		// websites:function(){
+		// 	return Websites.find({}, {sort:{upVotes:-1, downVotes:-1, createOn:-1}});
+		// },
+
+		websitesIndex: function (){
+			return WebsitesIndex;
 		}
 	});
 

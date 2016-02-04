@@ -21,6 +21,12 @@
         </a>
       </div>
       {{> loginButtons}}
+      <div class="navbar-right searchbox-container">
+        <div class="searchbox">
+          <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+          {{> EasySearch.Input index=websitesIndex}}
+        </div>
+      </div>
     </div>
   </nav>
 </template>
@@ -59,9 +65,9 @@
 <!-- template that displays several website items -->
 <template name="website_list">
 	<ol>
-  	{{#each websites}}
-  	{{>website_item}}
-  	{{/each}}
+  	{{#EasySearch.Each index=websitesIndex}}
+  	 {{>website_item}}
+  	{{/EasySearch.Each}}
 	</ol>
 </template>
 

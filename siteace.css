@@ -2,3 +2,13 @@
 .hidden_div{
 	display:none;
 }
+.searchbox-container{
+	margin: 10px 10px 0 0;
+}
+/*.searchbox{
+	border: 1px;
+	border-radius: 10%;
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+}*/

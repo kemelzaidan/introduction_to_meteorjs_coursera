@@ -23,3 +23,8 @@ accounts-password
 accounts-ui
 iron:router
 arkham:comments-ui
+http
+meteorhacks:npm
+
+
+npm-container

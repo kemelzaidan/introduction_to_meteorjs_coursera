@@ -40,7 +40,7 @@
 		<form class="js-save-website-form">
 		  <div class="form-group">
 		    <label for="url">Site address</label>
-		    <input type="text" class="form-control" id="url" placeholder="http://www.mysite.com">
+		    <input type="text" class="form-control .js-make-request" id="url" placeholder="http://www.mysite.com">
 		  </div>
 		  <div class="form-group">
 		    <label for="title">Title</label>
@@ -59,9 +59,9 @@
 <!-- template that displays several website items -->
 <template name="website_list">
 	<ol>
-	{{#each websites}}
-	{{>website_item}}
-	{{/each}}
+  	{{#each websites}}
+  	{{>website_item}}
+  	{{/each}}
 	</ol>
 </template>
 

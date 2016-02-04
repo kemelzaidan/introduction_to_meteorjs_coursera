@@ -51,12 +51,29 @@ if (Meteor.isClient) {
 
 			return false;// prevent the button from reloading the page
 		}
-	})
+	});
 
 	Template.website_form.events({
 		"click .js-toggle-website-form":function(event){
 			$("#website_form").toggle('slow');
 		},
+
+		"blur #url":function(event){
+			console.log("event blur captured");
+			var url = event.currentTarget.value;
+			console.log("URL is: "+url);
+			Meteor.call("requestWebsite", url, function(error, result){
+				if(error){
+					console.log("error", error);
+				}
+				if(result){
+					console.log("result received!");
+					$('#title').val(result.title);
+					$('#description').val(result.description);
+				}
+			});
+		}, // end of blur event
+
 		"submit .js-save-website-form":function(event){
 
 			// here is an example of how to get the url out of the form:
@@ -66,7 +83,6 @@ if (Meteor.isClient) {
 			console.log("The url they entered is: "+url);
 
 			//  put your website saving code in here!
-
 			Websites.insert({url:url,
 											title:title,
 											description:description,
@@ -78,7 +94,6 @@ if (Meteor.isClient) {
 
 			$("#website_form").toggle('slow');
 			return false;// stop the form submit from reloading the page
-
 		}
 	});
 }
@@ -86,9 +101,31 @@ if (Meteor.isClient) {
 
 if (Meteor.isServer) {
 
+	Meteor.methods({
+		requestWebsite:function(url){
+			try {
+				console.log("making the request to "+url);
+				var result = HTTP.get(url, {followRedirects:true});
+				console.log("Request to "+url+" returned successfully!");
+				var cheerio = Meteor.npmRequire('cheerio');
+				$ = cheerio.load(result.content);
+				var answer = {};
+				answer["title"] = $("title").text();
+				answer["description"] = $('meta[name=description]').prop('content');
+				console.log("Title: " + answer["title"]);
+				console.log("Description: " + answer["description"]);
+				return answer;
+			} catch (e) {
+				console.error('Request returned error: ', e);
+			}
+		} // end requestWebsite
+	});
+
 }
 
+/////
 // routing
+/////
 Router.configure({
 	layoutTemplate: 'ApplicationLayout'
 });
@@ -97,6 +134,7 @@ Router.route('/', function () {
 	this.render('navbar', {
 		to: 'navbar'
 	});
+
   this.render('sitesList', {
 		to:"main"
 	});
@@ -106,6 +144,7 @@ Router.route('/website/:_id', function () {
 	this.render('navbar', {
 		to: 'navbar'
 	});
+
 	this.render('websiteDetails', {
 		to: 'main',
 		data: function () {

@@ -1,8 +1,15 @@
 Websites = new Mongo.Collection("websites");
+Votes = new Mongo.Collection("votes");
+
+// search index
 var WebsitesIndex = new EasySearch.Index({
 	collection: Websites,
 	fields: ['title', 'description'],
-	engine: new EasySearch.MongoDB()
+	engine: new EasySearch.Minimongo({
+		sort: function(){
+			return {upVotes:-1, downVotes:-1, createOn:-1};
+		}
+	})
 });
 
 if (Meteor.isClient) {
@@ -46,9 +53,28 @@ if (Meteor.isClient) {
 			var up_votes = this.upVotes;
 			console.log("Up voting website with id "+website_id);
 			// put the code in here to add a vote to a website!
-			Websites.update({_id:website_id},
-											{$inc: {upVotes:1}});
+			Websites.update({_id:website_id}, {$inc: {upVotes:1}});
 			console.log("Up votes: "+up_votes);
+
+			// insert the likes on the DB
+			var description = this.description.toLowerCase();
+			var title = this.title.toLowerCase();
+			var regex = /[a-z\u00E0-\u00FC]{3,}/g; // grab just words >= 3 letters
+			// create an array of undesired words
+			var dontWant = ['i', 'a', 'an', 'am', 'the', 'this', 'that', 'those', 'then', 'than', 'you', 'he', 'she', 'us', 'we', 'were', 'it', 'was'];
+			// create an array of words out of title and description
+			var tokens = description.match(regex);
+			var tokens2= title.match(regex);
+			// function toRemove(element) {
+			// 	return dontWant.indexOf(element) < 0;
+			// }
+			Array.prototype.push.apply(tokens, tokens2); // merge both arrays
+			tokens = jQuery.unique(tokens); // remove duplicates
+			// pop "non-words"
+			tokens = tokens.filter(function(element){
+				return dontWant.indexOf(element) < 0;
+			});
+			console.log("Tokens are: ", tokens);
 
 			return false;// prevent the button from reloading the page
 		},
